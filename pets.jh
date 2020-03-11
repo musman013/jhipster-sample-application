@@ -1,0 +1,69 @@
+entity Owners {
+	id Integer required,
+	firstName String maxlength(30),
+	lastName String maxlength(30),
+	address String maxlength(255),
+	city String maxlength(80),
+	telephone String maxlength(20)
+}
+
+entity Pets {
+	id Integer required,
+	name String maxlength(30),
+	birthDate LocalDate,
+	type Types required,
+	owner Owners required
+}
+
+entity Specialties {
+	id Integer required,
+	name String maxlength(30),
+}
+
+entity Types {
+	id Integer required,
+	name String maxlength(30),
+}
+
+entity Vets {
+	id Integer required,
+	firstName String maxlength(30),
+	lastName String maxlength(30)
+}
+
+entity Visits {
+	id Integer required,
+	visitDate LocalDate,
+	description String maxlength(255),
+    pet Pets required
+}
+
+
+
+// Relations
+relationship ManyToOne {
+	Pets{owner required} to Owners{pets}
+}
+
+relationship ManyToOne {
+	Pets{type required} to Types{pets}
+}
+
+// TODO This is a pure ManyToMany relation (delete me and decide owner side)
+relationship ManyToMany {
+	VetSpecialties{vet required} to Vets{vetSpecialties}
+	VetSpecialties{specialty required} to Specialties{vetSpecialties}
+}
+
+relationship ManyToOne {
+	Visits{pet required} to Pets{visits}
+}
+
+
+
+// Options
+service * with serviceClass
+paginate * with pagination
+dto * with mapstruct
+filter *
+
